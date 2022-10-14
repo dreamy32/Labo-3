@@ -9,63 +9,61 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet"
             href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <style>
-            .mainContainer {
-                width: 50%;
-                max-width: 700px;
-                min-width: 500px;
-                margin: auto;
-            }
-
-            .header {
-                font-size: 36px;
-                font-weight: bold;
-                padding: 10px;
-            }
-
-            #searchBar {
-                display: none;
-            }
-
-            #bookmarksList {
-                width: 100%;
-                padding: 10px;
-            }
-
-            .favicon {
-                height: 24px;
-                margin: 8px;
-            }
-
-            .bookmarkLayout {
-                display: grid;
-                grid-template-columns: 1fr 40px 1fr 35px 35px;
-                align-items: center;
-                border-radius: 8px;
-                padding-left: 5px;
-                gap: 5px;
-            }
-
-            .bookmarkRow>.cmd {
-                display: none;
-            }
-
-            .bookmarkRow:hover>.cmd {
-                display: inline-block;
-            }
-
-            .bookmarkRow:hover {
-                background-color: rgb(195, 255, 255);
-            }
-
-            .cmd {
-                cursor: pointer;
-                font-size: 24px !important;
-                font-weight: bold;
-                color: blue;
-                text-align: center;
-            }
-        </style>
+            <style>
+                .mainContainer {
+                    width: 50%;
+                    max-width: 700px;
+                    min-width: 500px;
+                    margin: auto;
+                }
+        
+                .header {
+                    font-size: 36px;
+                    font-weight: bold;
+                    padding: 10px;
+                }
+        
+                #searchBar {
+                    display: none;
+                }
+        
+                #bookmarksList {
+                    width: 100%;
+                    padding: 10px;
+                }
+        
+                .favicon {
+                    height: 24px;
+                    margin: 8px;
+                }
+        
+        
+                .bookmarkRow>.cmd {
+                    display: none;
+                }
+        
+                .bookmarkRow:hover>.cmd {
+                    display: inline-block;
+                }
+        
+        
+                .visually-hidden,
+                .visually-hidden-focusable:not(:focus):not(:focus-within) {
+                    position: absolute !important;
+                    width: 1px !important;
+                    height: 1px !important;
+                    padding: 0 !important;
+                    margin: -1px !important;
+                    overflow: hidden !important;
+                    clip: rect(0, 0, 0, 0) !important;
+                    white-space: nowrap !important;
+                    border: 0 !important;
+                }
+        
+                .bi {
+                    vertical-align: -0.125em;
+                }
+            </style>
     </head>
 
     <body>
@@ -83,7 +81,10 @@
                 </div>
             </div>
 
-            <div id="bookmarksList">
+            <div>
+                <div id="bookmarksList">
+
+                </div>
             </div>
             <!--Dialogues -->
             <div id="bookmarkDlg">
@@ -92,9 +93,13 @@
                     <br>
                     <input type="text" id="title_input" class="form-control" placeholder="Title" required>
                     <br>
-                    <input type="text" id="url_input" class="form-control" placeholder="hyperlien" required>
+                    <input type="text" id="text_input" class="form-control" placeholder="texte" required>
+                    <br>
+                    <input type="text" id="url_input" class="form-control" placeholder="url image" required>
                     <br>
                     <input type="text" id="category_input" class="form-control" placeholder="catégorie" required>
+                    <br>
+                    <input type="text" id="date_input" class="form-control" placeholder="date" required>
                 </form>
             </div>
             <div id="confirmDlg">
@@ -199,25 +204,21 @@
                 });
             }
 
-            function makeImage(url) {
-                let link = $(`<a href='${url}' target='_blank'></a>`)
-                link.append($(`<img src="${url}">`));
-                return link;
-            }
             function insertIntoBookmarkList(bookmark) {
                 // insert into the div
-                let catElem = $(`<div>${bookmark.Categorie}</div>`);
-                let titElem = $(`<div>${bookmark.Titre}</div>`);
-                let textElem = $(`<div>${bookmark.Texte}</div>`);
-                let dateElem = $(`<div>${secondsToDateString(bookmark.Date)}</div>`);
+                let catElem = $(`<h6><small>${bookmark.Categorie}</small></h6>`);
+                let titElem = $(`<h2 id='title'>${bookmark.Titre}</h2>`);
+                let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Titre}'></div>`);
+                let dateElem = $(`<span>Publié le : <b>${secondsToDateString(bookmark.Date)}</b></span>`);
+                let textElem = $(`<hr> <p>${bookmark.Texte}</p>`);
                 let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Titre}"></div>`);
                 let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Titre}"></div>`);
                 let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
                 bookmarkRow.append(catElem);
-                bookmarkRow.append(makeImage(bookmark.ImageUrl));
                 bookmarkRow.append(titElem);
-                bookmarkRow.append(textElem);
+                bookmarkRow.append(imageElem);
                 bookmarkRow.append(dateElem);
+                bookmarkRow.append(textElem);
                 bookmarkRow.append(editCmd);
                 bookmarkRow.append(deleteCmd);
                 $("#bookmarksList").append(bookmarkRow);
@@ -268,12 +269,14 @@
             function resetBookmarkForm() {
                 $("#Id_input").val("0");
                 $("#title_input").val("");
+                $("#text_input").val("");
                 $("#url_input").val("");
                 $("#category_input").val("");
+                $("#date_input").val(0);
             }
             function bookmarkFromForm() {
                 if ($("#bookmakForm")[0].checkValidity()) {
-                    let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Url: $("#url_input").val(), Category: $("#category_input").val() };
+                    let bookmark = { Id: parseInt($("#Id_input").val()), Titre: $("#title_input").val(), Texte: $("#text_input").val(), ImageUrl: $("#url_input").val(), Categorie: $("#category_input").val(), Date: parseInt($("#date_input").val()) };
                     return bookmark;
                 } else {
                     $("#bookmakForm")[0].reportValidity()
