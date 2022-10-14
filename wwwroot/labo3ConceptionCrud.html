@@ -103,8 +103,10 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src='/utilities.js'></script>
         <script defer>
-            const apiBaseURL = "http://localhost:5000/api/bookmarks";
+            
+            const apiBaseURL = "http://localhost:5000/api/news";
             const periodicRefreshPeriod = 10;
             let holdCheckETag = false;
             let currentETag = "";
@@ -125,7 +127,10 @@
                 }
             }
             function getBookmarksList() {
-                let queryString = "?sort=Category&sort=Title";
+                // basic search
+                let queryString = "?sort=Date";
+
+                // category and title search
                 if (!hideSearchBar) {
                     let searchCategory = $("#searchCategory").val();
                     let searchTitle = $("#searchTitle").val();
@@ -134,6 +139,8 @@
                     if (searchTitle != "")
                         queryString += "&Title=*" + searchTitle + "*";
                 }
+
+                // then get all from search
                 GET_ALL(refreshBookmarksList, error, queryString);
             }
 
@@ -192,20 +199,25 @@
                 });
             }
 
-            function makeFavicon(url) {
+            function makeImage(url) {
                 let link = $(`<a href='${url}' target='_blank'></a>`)
-                link.append($(`<img class='favicon' src="https://www.google.com/s2/favicons?domain=${url}&sz=48">`));
+                link.append($(`<img src="${url}">`));
                 return link;
             }
             function insertIntoBookmarkList(bookmark) {
-                let catElem = $(`<div>${bookmark.Category}</div>`);
-                let titElem = $(`<div>${bookmark.Title}</div>`);
-                let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Title}"></div>`);
-                let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"></div>`);
+                // insert into the div
+                let catElem = $(`<div>${bookmark.Categorie}</div>`);
+                let titElem = $(`<div>${bookmark.Titre}</div>`);
+                let textElem = $(`<div>${bookmark.Texte}</div>`);
+                let dateElem = $(`<div>${secondsToDateString(bookmark.Date)}</div>`);
+                let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Titre}"></div>`);
+                let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Titre}"></div>`);
                 let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
                 bookmarkRow.append(catElem);
-                bookmarkRow.append(makeFavicon(bookmark.Url));
+                bookmarkRow.append(makeImage(bookmark.ImageUrl));
                 bookmarkRow.append(titElem);
+                bookmarkRow.append(textElem);
+                bookmarkRow.append(dateElem);
                 bookmarkRow.append(editCmd);
                 bookmarkRow.append(deleteCmd);
                 $("#bookmarksList").append(bookmarkRow);
