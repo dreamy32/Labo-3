@@ -1,362 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Bookmarks Manager</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet"
-            href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <style>
-            .mainContainer {
-                width: 50%;
-                max-width: 700px;
-                min-width: 500px;
-                margin: auto;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <style>
+        .mainContainer {
+            width: 50%;
+            max-width: 700px;
+            min-width: 500px;
+            margin: auto;
+        }
 
-            .header {
-                font-size: 36px;
-                font-weight: bold;
-                padding: 10px;
-            }
+        .header {
+            font-size: 36px;
+            font-weight: bold;
+            padding: 10px;
+        }
 
-            #searchBar {
-                display: none;
-            }
+        #searchBar {
+            display: none;
+        }
 
-            #bookmarksList {
-                width: 100%;
-                padding: 10px;
-            }
+        #bookmarksList {
+            width: 100%;
+            padding: 10px;
+        }
 
-            .favicon {
-                height: 24px;
-                margin: 8px;
-            }
+        .favicon {
+            height: 24px;
+            margin: 8px;
+        }
 
-            .bookmarkLayout {
-                display: grid;
-                grid-template-columns: 1fr 40px 1fr 35px 35px;
-                align-items: center;
-                border-radius: 8px;
-                padding-left: 5px;
-                gap: 5px;
-            }
 
-            .bookmarkRow>.cmd {
-                display: none;
-            }
+        .bookmarkRow>.cmd {
+            display: none;
+        }
 
-            .bookmarkRow:hover>.cmd {
-                display: inline-block;
-            }
+        .bookmarkRow:hover>.cmd {
+            display: inline-block;
+        }
 
-            .bookmarkRow:hover {
-                background-color: rgb(195, 255, 255);
-            }
 
-            .cmd {
-                cursor: pointer;
-                font-size: 24px !important;
-                font-weight: bold;
-                color: blue;
-                text-align: center;
-            }
-        </style>
-    </head>
+        .visually-hidden,
+        .visually-hidden-focusable:not(:focus):not(:focus-within) {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
 
-    <body>
-        <div class="mainContainer">
-            <span class="header">Gestionnaire de favoris </span>
-            <span class="cmd fa fa-plus-square" id="newBookmarkCmd"></span>&nbsp;
-            <span class="cmd fa fa-search"></span>
-            <hr>
-            <div id="searchBar">
-                <div class="bookmarkLayout">
-                    <input type="search" id="searchCategory" class="form-control"> </input>
-                    <span class="cmd fa fa-refresh"></span>
-                    <input type="search" id="searchTitle" class="form-control"> </input>
-                    <span class="cmd fa fa-refresh"></span>
-                </div>
-            </div>
+        .bi {
+            vertical-align: -0.125em;
+        }
+    </style>
+</head>
 
-            <div id="bookmarksList">
-            </div>
-            <!--Dialogues -->
-            <div id="bookmarkDlg">
-                <form id="bookmakForm">
-                    <input type="hidden" id="Id_input" value="0">
-                    <br>
-                    <input type="text" id="title_input" class="form-control" placeholder="Title" required>
-                    <br>
-                    <input type="text" id="url_input" class="form-control" placeholder="hyperlien" required>
-                    <br>
-                    <input type="text" id="category_input" class="form-control" placeholder="catégorie" required>
-                </form>
-            </div>
-            <div id="confirmDlg">
-                <span id="confirmationMessage"></span>
+<body>
+    <!-- Absolute Elements -->
+    <div style="position: fixed; bottom: 5px; left: 5px;">
+        <button type="button" class="btn btn-lg text-primary" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="112" height="112" fill="currentColor"
+                class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z">
+                </path>
+            </svg>
+        </button>
+    </div>
+    <div style="text-align: center; margin: 35px;">
+        <h1>Gestionaire de Nouvelles</h1>
+    </div>
+    <div class="mainContainer">
+        
+        <!-- <span class="cmd fa fa-plus-square" id="newBookmarkCmd"></span> -->
+        <hr>
+        <div id="searchBar">
+            <div class="bookmarkLayout">
+                <input type="search" id="searchCategory" class="form-control"> </input>
+                <span class="cmd fa fa-refresh"></span>
+                <input type="search" id="searchTitle" class="form-control"> </input>
+                <span class="cmd fa fa-refresh"></span>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script defer>
-            const apiBaseURL = "http://localhost:5000/api/bookmarks";
-            const periodicRefreshPeriod = 10;
-            let holdCheckETag = false;
-            let currentETag = "";
-            let createMode = true;
-            let searchCategory = "";
-            let searchTitle = "";
-            let hideSearchBar = true;
 
+        <div id="bookmarksList">
+            <div>
+                <h6><small>Climat</small></h6>
+                <h2 id="title">Fonderie Horne : Québec a attendu 8 jours avant d’inspecter un « immense nuage brun »
+                </h2>
+                <div>
+                    <img style="width: 100%;"
+                        src="https://images.radio-canada.ca/q_auto,w_960/v1/ici-info/16x9/rapport-inspection.png"
+                        alt="">
+                </div>
+                <span>Publié le: <b>14 octobre 2022</b></span>
+                <hr>
+                <p>Le ministère de l'Environnement du Québec a attendu huit jours avant de lancer une inspection sur le
+                    terrain de la Fonderie Horne, fin 2020, à la suite du signalement d'une « tempête de poussières »
+                    contaminées à l'arsenic et aux métaux lourds, révèlent des documents obtenus par Radio-Canada.\n\nLa
+                    plainte du 23 novembre 2020 n'avait rien de rassurant quand elle est arrivée aux bureaux du
+                    ministère de l'Environnement et de la Lutte contre les changements climatiques (MELCC), à
+                    Rouyn-Noranda. Un automobiliste avait signalé « un immense nuage brun » en provenance d'un parc à
+                    résidus miniers de la fonderie, qu'on sait hautement contaminé.\n\nPar la suite, une fonctionnaire
+                    écrit à sa collègue que dans la voie de contournement, il est possible d'observer de la neige brune
+                    (probablement à cause de ce nuage-là). Le Ministère est alors conscient du fait que la situation est
+                    dangereuse pour les automobilistes.\n\n« La quantité de poussières émises est suffisante pour que la
+                    visibilité soit réduite pour les automobilistes qui empruntent la voie de contournement. »\n\n— Une
+                    citation de Véronic Boudreau Thibeault, inspectrice du MELCC, le 1er décembre 2020, au sujet des
+                    informations dont elle dispose le 23 novembre\nMalgré tout, aucune inspection ni échantillonnage ne
+                    sont réalisés dans la foulée, même quand la Fonderie Horne signale à son tour, le 23 novembre, le
+                    nuage de poussières. Et la pollution de l'air va perdurer.</p>
+            </div>
+            <hr>
+            <!-- Crud Operations -->
+            <!-- Modifier -->
+            <button type="submit" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3"
+                    viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5Zm0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5Zm5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5Zm-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5Zm8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5Zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z" />
+                </svg>
+                <span>&nbsp;Modifier</span>
+            </button>
+            <!-- Delete -->
+            <button type="submit" class="btn btn-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z">
+                    </path>
+                </svg>
+                <span>&nbsp;Supprimer</span>
+            </button>
+            <br>
+            <br>
+            <div class="bookmarkLayout bookmarkRow">
+                <h6><small>Climat</small></h6>
+                <h2 id="title">Fonderie Horne : Québec a attendu 8 jours avant d’inspecter un « immense nuage brun »
+                </h2>
+                <div>
+                    <img style="width: 100%;"
+                        src="https://images.radio-canada.ca/q_auto,w_960/v1/ici-info/16x9/rapport-inspection.png"
+                        alt="">
+                </div>
+                <span>Publié le: <b>14 octobre 2022</b></span>
+                <hr>
+                <p>Le ministère de l'Environnement du Québec a attendu huit jours avant de lancer une inspection sur le
+                    terrain de la Fonderie Horne, fin 2020, à la suite du signalement d'une « tempête de poussières »
+                    contaminées à l'arsenic et aux métaux lourds, révèlent des documents obtenus par Radio-Canada.\n\nLa
+                    plainte du 23 novembre 2020 n'avait rien de rassurant quand elle est arrivée aux bureaux du
+                    ministère de l'Environnement et de la Lutte contre les changements climatiques (MELCC), à
+                    Rouyn-Noranda. Un automobiliste avait signalé « un immense nuage brun » en provenance d'un parc à
+                    résidus miniers de la fonderie, qu'on sait hautement contaminé.\n\nPar la suite, une fonctionnaire
+                    écrit à sa collègue que dans la voie de contournement, il est possible d'observer de la neige brune
+                    (probablement à cause de ce nuage-là). Le Ministère est alors conscient du fait que la situation est
+                    dangereuse pour les automobilistes.\n\n« La quantité de poussières émises est suffisante pour que la
+                    visibilité soit réduite pour les automobilistes qui empruntent la voie de contournement. »\n\n— Une
+                    citation de Véronic Boudreau Thibeault, inspectrice du MELCC, le 1er décembre 2020, au sujet des
+                    informations dont elle dispose le 23 novembre\nMalgré tout, aucune inspection ni échantillonnage ne
+                    sont réalisés dans la foulée, même quand la Fonderie Horne signale à son tour, le 23 novembre, le
+                    nuage de poussières. Et la pollution de l'air va perdurer.</p>
+            </div>
+        </div>
+        <!--Dialogues -->
+        <div id="bookmarkDlg">
+            <form id="bookmakForm">
+                <input type="hidden" id="Id_input" value="0">
+                <br>
+                <input type="text" id="title_input" class="form-control" placeholder="Title" required>
+                <br>
+                <input type="text" id="url_input" class="form-control" placeholder="hyperlien" required>
+                <br>
+                <input type="text" id="category_input" class="form-control" placeholder="catégorie" required>
+            </form>
+        </div>
+        <div id="confirmDlg">
+            <span id="confirmationMessage"></span>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        const apiBaseURL = "http://localhost:5000/api/bookmarks";
+        const periodicRefreshPeriod = 10;
+        let holdCheckETag = false;
+        let currentETag = "";
+        let createMode = true;
+        let searchCategory = "";
+        let searchTitle = "";
+        let hideSearchBar = true;
+
+        HEAD(checkETag);
+        setInterval(() => {
             HEAD(checkETag);
-            setInterval(() => {
-                HEAD(checkETag);
-            }, periodicRefreshPeriod * 1000);
+        }, periodicRefreshPeriod * 1000);
 
-            function checkETag(ETag) {
-                if (!holdCheckETag && ETag != currentETag) {
-                    currentETag = ETag;
-                    getBookmarksList();
-                }
-            }
-            function getBookmarksList() {
-                let queryString = "?sort=Category&sort=Title";
-                if (!hideSearchBar) {
-                    let searchCategory = $("#searchCategory").val();
-                    let searchTitle = $("#searchTitle").val();
-                    if (searchCategory != "")
-                        queryString += "&Category=*" + searchCategory + "*";
-                    if (searchTitle != "")
-                        queryString += "&Title=*" + searchTitle + "*";
-                }
-                GET_ALL(refreshBookmarksList, error, queryString);
-            }
-
-            function HEAD(successCallBack) {
-                $.ajax({
-                    url: apiBaseURL,
-                    type: 'HEAD',
-                    contentType: 'text/plain',
-                    complete: request => { successCallBack(request.getResponseHeader('ETag')) },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function GET_ID(id, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL + "/" + id,
-                    type: 'GET',
-                    success: data => { successCallBack(data); },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function GET_ALL(successCallBack, errorCallBack, queryString = null) {
-                let url = apiBaseURL + (queryString ? queryString : "");
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: (data, status, xhr) => { successCallBack(data, xhr.getResponseHeader("ETag")) },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function POST(data, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    success: (data) => { successCallBack(data) },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function PUT(bookmark, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL + "/" + bookmark.Id,
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify(bookmark),
-                    success: () => { successCallBack() },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function DELETE(id, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL + "/" + id,
-                    type: 'DELETE',
-                    success: () => { successCallBack() },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-
-            function makeFavicon(url) {
-                let link = $(`<a href='${url}' target='_blank'></a>`)
-                link.append($(`<img class='favicon' src="https://www.google.com/s2/favicons?domain=${url}&sz=48">`));
-                return link;
-            }
-            function insertIntoBookmarkList(bookmark) {
-                let catElem = $(`<div>${bookmark.Category}</div>`);
-                let titElem = $(`<div>${bookmark.Title}</div>`);
-                let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Title}"></div>`);
-                let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"></div>`);
-                let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
-                bookmarkRow.append(catElem);
-                bookmarkRow.append(makeFavicon(bookmark.Url));
-                bookmarkRow.append(titElem);
-                bookmarkRow.append(editCmd);
-                bookmarkRow.append(deleteCmd);
-                $("#bookmarksList").append(bookmarkRow);
-            }
-
-            function refreshBookmarksList(bookmarks, ETag) {
+        function checkETag(ETag) {
+            if (!holdCheckETag && ETag != currentETag) {
                 currentETag = ETag;
-                $("#bookmarksList").empty();
-                for (let bookmark of bookmarks) {
-                    insertIntoBookmarkList(bookmark);
-                }
-                $(".editCmd").click((e) => { editBookmark(e) });
-                $(".deleteCmd").click((e) => { deleteBookmark(e) });
-            }
-            function error(status) {
-            }
-            function newBookmark() {
-                holdCheckETag = true;
-                createMode = true;
-                $("#bookmarkDlg").dialog('option', 'title', 'Ajout de favori');
-                $("#bookmarkDlgOkBtn").text("Ajouter");
-                $("#bookmarkDlg").dialog('open');
-            }
-            function editBookmark(e) {
-                holdCheckETag = true;
-                createMode = false;
-                GET_ID(e.target.getAttribute("bookmarkid"), bookmarkToForm, error);
-                holdCheckETag = true;
-                $("#bookmarkDlg").dialog('option', 'title', 'Modification de favori');
-                $("#bookmarkDlgOkBtn").text("Modifier");
-                $("#bookmarkDlg").dialog('open');
-            }
-
-            function setConfirmationMessage(bookmark) {
-                $("#confirmationMessage").html("Voulez-vous vraiment effacer le favori <b>" + bookmark.Title + "</b>?");
-            }
-            let bookmarkIdToDelete = 0;
-            function deleteBookmark(e) {
-                holdCheckETag = true;
-                createMode = false;
-                bookmarkIdToDelete = e.target.getAttribute("bookmarkid")
-                GET_ID(e.target.getAttribute("bookmarkid"), setConfirmationMessage, error);
-                holdCheckETag = true;
-                $("#confirmDlg").dialog('option', 'title', 'Retrait de favori...');
-                $("#confirmDlgOkBtn").text("Effacer");
-                $("#confirmDlg").dialog('open');
-            }
-            function resetBookmarkForm() {
-                $("#Id_input").val("0");
-                $("#title_input").val("");
-                $("#url_input").val("");
-                $("#category_input").val("");
-            }
-            function bookmarkFromForm() {
-                if ($("#bookmakForm")[0].checkValidity()) {
-                    let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Url: $("#url_input").val(), Category: $("#category_input").val() };
-                    return bookmark;
-                } else {
-                    $("#bookmakForm")[0].reportValidity()
-                }
-                return false;
-            }
-            function bookmarkToForm(bookmark) {
-                $("#Id_input").val(bookmark.Id);
-                $("#title_input").val(bookmark.Title);
-                $("#url_input").val(bookmark.Url);
-                $("#category_input").val(bookmark.Category);
-            }
-
-            $("#newBookmarkCmd").click(newBookmark)
-            $(".fa-refresh").click((e) => {
                 getBookmarksList();
-            })
+            }
+        }
+        function getBookmarksList() {
+            let queryString = "?sort=Category&sort=Title";
+            if (!hideSearchBar) {
+                let searchCategory = $("#searchCategory").val();
+                let searchTitle = $("#searchTitle").val();
+                if (searchCategory != "")
+                    queryString += "&Category=*" + searchCategory + "*";
+                if (searchTitle != "")
+                    queryString += "&Title=*" + searchTitle + "*";
+            }
+            GET_ALL(refreshBookmarksList, error, queryString);
+        }
 
-            $(".fa-search").click((e) => {
-                console.log("search");
-                hideSearchBar = !hideSearchBar;
-                if (hideSearchBar)
-                    $("#searchBar").hide();
-                else
-                    $("#searchBar").show();
-                getBookmarksList();
-            })
+        function HEAD(successCallBack) {
+            $.ajax({
+                url: apiBaseURL,
+                type: 'HEAD',
+                contentType: 'text/plain',
+                complete: request => { successCallBack(request.getResponseHeader('ETag')) },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function GET_ID(id, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL + "/" + id,
+                type: 'GET',
+                success: data => { successCallBack(data); },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function GET_ALL(successCallBack, errorCallBack, queryString = null) {
+            let url = apiBaseURL + (queryString ? queryString : "");
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: (data, status, xhr) => { successCallBack(data, xhr.getResponseHeader("ETag")) },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function POST(data, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (data) => { successCallBack(data) },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function PUT(bookmark, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL + "/" + bookmark.Id,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(bookmark),
+                success: () => { successCallBack() },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function DELETE(id, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL + "/" + id,
+                type: 'DELETE',
+                success: () => { successCallBack() },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
 
-            $("#bookmarkDlg").dialog(
+        function makeFavicon(url) {
+            let link = $(`<a href='${url}' target='_blank'></a>`)
+            link.append($(`<img class='favicon' src="https://www.google.com/s2/favicons?domain=${url}&sz=48">`));
+            return link;
+        }
+        function insertIntoBookmarkList(bookmark) {
+            // let catElem = $(`<div>${bookmark.Category}</div>`);
+            // let titElem = $(`<div>${bookmark.Title}</div>`);
+            // let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Title}"></div>`);
+            // let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"></div>`);
+            // let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
+            // bookmarkRow.append(catElem);
+            // bookmarkRow.append(makeFavicon(bookmark.Url));
+            // bookmarkRow.append(titElem);
+            // bookmarkRow.append(editCmd);
+            // bookmarkRow.append(deleteCmd);
+            // $("#bookmarksList").append(bookmarkRow);
+        }
+
+        function refreshBookmarksList(bookmarks, ETag) {
+            currentETag = ETag;
+            $("#bookmarksList").empty();
+            for (let bookmark of bookmarks) {
+                insertIntoBookmarkList(bookmark);
+            }
+            $(".editCmd").click((e) => { editBookmark(e) });
+            $(".deleteCmd").click((e) => { deleteBookmark(e) });
+        }
+        function error(status) {
+        }
+        function newBookmark() {
+            holdCheckETag = true;
+            createMode = true;
+            $("#bookmarkDlg").dialog('option', 'title', 'Ajout de favori');
+            $("#bookmarkDlgOkBtn").text("Ajouter");
+            $("#bookmarkDlg").dialog('open');
+        }
+        function editBookmark(e) {
+            holdCheckETag = true;
+            createMode = false;
+            GET_ID(e.target.getAttribute("bookmarkid"), bookmarkToForm, error);
+            holdCheckETag = true;
+            $("#bookmarkDlg").dialog('option', 'title', 'Modification de favori');
+            $("#bookmarkDlgOkBtn").text("Modifier");
+            $("#bookmarkDlg").dialog('open');
+        }
+
+        function setConfirmationMessage(bookmark) {
+            $("#confirmationMessage").html("Voulez-vous vraiment effacer le favori <b>" + bookmark.Title + "</b>?");
+        }
+        let bookmarkIdToDelete = 0;
+        function deleteBookmark(e) {
+            holdCheckETag = true;
+            createMode = false;
+            bookmarkIdToDelete = e.target.getAttribute("bookmarkid")
+            GET_ID(e.target.getAttribute("bookmarkid"), setConfirmationMessage, error);
+            holdCheckETag = true;
+            $("#confirmDlg").dialog('option', 'title', 'Retrait de favori...');
+            $("#confirmDlgOkBtn").text("Effacer");
+            $("#confirmDlg").dialog('open');
+        }
+        function resetBookmarkForm() {
+            $("#Id_input").val("0");
+            $("#title_input").val("");
+            $("#url_input").val("");
+            $("#category_input").val("");
+        }
+        function bookmarkFromForm() {
+            if ($("#bookmakForm")[0].checkValidity()) {
+                let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Url: $("#url_input").val(), Category: $("#category_input").val() };
+                return bookmark;
+            } else {
+                $("#bookmakForm")[0].reportValidity()
+            }
+            return false;
+        }
+        function bookmarkToForm(bookmark) {
+            $("#Id_input").val(bookmark.Id);
+            $("#title_input").val(bookmark.Title);
+            $("#url_input").val(bookmark.Url);
+            $("#category_input").val(bookmark.Category);
+        }
+
+        $("#newBookmarkCmd").click(newBookmark)
+        $(".fa-refresh").click((e) => {
+            getBookmarksList();
+        })
+
+        $(".fa-search").click((e) => {
+            console.log("search");
+            hideSearchBar = !hideSearchBar;
+            if (hideSearchBar)
+                $("#searchBar").hide();
+            else
+                $("#searchBar").show();
+            getBookmarksList();
+        })
+
+        $("#bookmarkDlg").dialog(
+            {
+                title: "Nouveau favori",
+                autoOpen: false,
+                show: { effect: 'fade', speed: 400 },
+                hide: { effect: 'fade', speed: 400 },
+            });
+        $("#bookmarkDlg").dialog("option", "position", { my: "top", at: "top", of: window });
+        $("#bookmarkDlg").dialog("option", "buttons",
+            [
                 {
-                    title: "Nouveau favori",
-                    autoOpen: false,
-                    show: { effect: 'fade', speed: 400 },
-                    hide: { effect: 'fade', speed: 400 },
-                });
-            $("#bookmarkDlg").dialog("option", "position", { my: "top", at: "top", of: window });
-            $("#bookmarkDlg").dialog("option", "buttons",
-                [
-                    {
-                        id: "bookmarkDlgOkBtn",
-                        text: "Ajouter...",
-                        click: function () {
-                            let bookmark = bookmarkFromForm();
-                            if (bookmark) {
-                                if (createMode)
-                                    POST(bookmark, refreshBookmarksList, error);
-                                else
-                                    PUT(bookmark, refreshBookmarksList, error);
-                                resetBookmarkForm();
-                                holdCheckETag = false;
-                                $(this).dialog("close");
-                            }
-                        }
-                    },
-                    {
-                        text: "Annuler",
-                        click: function () {
+                    id: "bookmarkDlgOkBtn",
+                    text: "Ajouter...",
+                    click: function () {
+                        let bookmark = bookmarkFromForm();
+                        if (bookmark) {
+                            if (createMode)
+                                POST(bookmark, refreshBookmarksList, error);
+                            else
+                                PUT(bookmark, refreshBookmarksList, error);
+                            resetBookmarkForm();
                             holdCheckETag = false;
                             $(this).dialog("close");
                         }
                     }
-                ]
-            );
-            $("#confirmDlg").dialog(
+                },
                 {
-                    title: "Attention...",
-                    autoOpen: false,
-                    show: { effect: 'fade', speed: 400 },
-                    hide: { effect: 'fade', speed: 400 },
-                });
-            $("#confirmDlg").dialog("option", "position", { my: "top", at: "top", of: window });
-            $("#confirmDlg").dialog("option", "buttons",
-                [
-                    {
-                        id: "confirmDlgOkBtn",
-                        text: "Oui",
-                        click: function () {
-                            holdCheckETag = false;
-                            if (bookmarkIdToDelete)
-                                DELETE(bookmarkIdToDelete, refreshBookmarksList, error);
-                            bookmarkIdToDelete = 0;
-                            $(this).dialog("close");
-                        }
-                    },
-                    {
-                        text: "Annuler",
-                        click: function () {
-                            holdCheckETag = false;
-                            bookmarkIdToDelete = 0;
-                            $(this).dialog("close");
-                        }
+                    text: "Annuler",
+                    click: function () {
+                        holdCheckETag = false;
+                        $(this).dialog("close");
                     }
-                ]
-            );
-        </script>
-    </body>
+                }
+            ]
+        );
+        $("#confirmDlg").dialog(
+            {
+                title: "Attention...",
+                autoOpen: false,
+                show: { effect: 'fade', speed: 400 },
+                hide: { effect: 'fade', speed: 400 },
+            });
+        $("#confirmDlg").dialog("option", "position", { my: "top", at: "top", of: window });
+        $("#confirmDlg").dialog("option", "buttons",
+            [
+                {
+                    id: "confirmDlgOkBtn",
+                    text: "Oui",
+                    click: function () {
+                        holdCheckETag = false;
+                        if (bookmarkIdToDelete)
+                            DELETE(bookmarkIdToDelete, refreshBookmarksList, error);
+                        bookmarkIdToDelete = 0;
+                        $(this).dialog("close");
+                    }
+                },
+                {
+                    text: "Annuler",
+                    click: function () {
+                        holdCheckETag = false;
+                        bookmarkIdToDelete = 0;
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        );
+    </script>
+</body>
 
 </html>
