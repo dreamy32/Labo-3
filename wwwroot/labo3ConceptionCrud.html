@@ -206,13 +206,13 @@
 
             function insertIntoBookmarkList(bookmark) {
                 // insert into the div
-                let catElem = $(`<h6><small>${bookmark.Categorie}</small></h6>`);
-                let titElem = $(`<h2 id='title'>${bookmark.Titre}</h2>`);
-                let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Titre}'></div>`);
+                let catElem = $(`<h6><small>${bookmark.Category}</small></h6>`);
+                let titElem = $(`<h2 id='title'>${bookmark.Title}</h2>`);
+                let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Title}'></div>`);
                 let dateElem = $(`<span>Publié le : <b>${secondsToDateString(bookmark.Date)}</b></span>`);
-                let textElem = $(`<hr> <p>${bookmark.Texte}</p>`);
-                let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Titre}"></div>`);
-                let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Titre}"></div>`);
+                let textElem = $(`<hr> <p>${bookmark.Text}</p>`);
+                let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Title}"></div>`);
+                let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"></div>`);
                 let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
                 bookmarkRow.append(catElem);
                 bookmarkRow.append(titElem);
@@ -276,7 +276,7 @@
             }
             function bookmarkFromForm() {
                 if ($("#bookmakForm")[0].checkValidity()) {
-                    let bookmark = { Id: parseInt($("#Id_input").val()), Titre: $("#title_input").val(), Texte: $("#text_input").val(), ImageUrl: $("#url_input").val(), Categorie: $("#category_input").val(), Date: parseInt($("#date_input").val()) };
+                    let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Category: $("#category_input").val(), Text: $("#text_input").val(), ImageUrl: $("#url_input").val(), Date: parseInt($("#date_input").val()) };
                     return bookmark;
                 } else {
                     $("#bookmakForm")[0].reportValidity()
@@ -285,11 +285,11 @@
             }
             function bookmarkToForm(bookmark) {
                 $("#Id_input").val(bookmark.Id);
-                $("#title_input").val(bookmark.Titre);
+                $("#title_input").val(bookmark.Title);
                 $("#url_input").val(bookmark.ImageUrl);
-                $("#category_input").val(bookmark.Categorie);
-                $("#text_input").val(bookmark.Texte);
-                $("#date_input").val(bookmark.date);
+                $("#category_input").val(bookmark.Category);
+                $("#text_input").val(bookmark.Text);
+                $("#date_input").val(bookmark.Date);
             }
 
             $("#newBookmarkCmd").click(newBookmark)
