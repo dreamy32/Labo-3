@@ -272,7 +272,7 @@
                 $("#text_input").val("");
                 $("#url_input").val("");
                 $("#category_input").val("");
-                $("#date_input").val(0);
+                $("#date_input").val("0");
             }
             function bookmarkFromForm() {
                 if ($("#bookmakForm")[0].checkValidity()) {
@@ -285,9 +285,11 @@
             }
             function bookmarkToForm(bookmark) {
                 $("#Id_input").val(bookmark.Id);
-                $("#title_input").val(bookmark.Title);
-                $("#url_input").val(bookmark.Url);
-                $("#category_input").val(bookmark.Category);
+                $("#title_input").val(bookmark.Titre);
+                $("#url_input").val(bookmark.ImageUrl);
+                $("#category_input").val(bookmark.Categorie);
+                $("#text_input").val(bookmark.Texte);
+                $("#date_input").val(bookmark.date);
             }
 
             $("#newBookmarkCmd").click(newBookmark)
