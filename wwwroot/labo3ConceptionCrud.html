@@ -67,10 +67,20 @@
     </head>
 
     <body>
+        <div style="position: fixed; bottom: 5px; left: 5px;">
+            <button id="newBookmarkCmd" type="button" class="btn btn-lg text-primary" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="112" height="112" fill="currentColor"
+                    class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+        <div style="text-align: center; margin: 35px;">
+            <h1>Gestionaire de Nouvelles</h1>
+        </div>
         <div class="mainContainer">
-            <span class="header">Gestionnaire de favoris </span>
-            <span class="cmd fa fa-plus-square" id="newBookmarkCmd"></span>&nbsp;
-            <span class="cmd fa fa-search"></span>
             <hr>
             <div id="searchBar">
                 <div class="bookmarkLayout">
@@ -211,9 +221,30 @@
                 let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Title}'></div>`);
                 const date = new Date().toLocaleDateString();
                 let dateElem = $(`<span>Publié le : <b>${date}</b></span>`);
-                let textElem = $(`<hr> <p>${bookmark.Text}</p>`);
-                let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Title}"></div>`);
-                let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"></div>`);
+                let textElem = $(`<hr> <p>${bookmark.Text}</p><hr>`);
+                // let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Title}"></div>`);
+                // let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"></div>`);
+                let deleteCmd = $(`
+                <button type="submit" class="cmd deleteCmd btn btn-danger" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3"
+                        viewBox="0 0 16 16">
+                        <path
+                        d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z">
+                    </path>
+                    </svg>
+                    <span>&nbsp;Retirer</span>
+                </button>
+                `);
+                let editCmd = $(`
+                <button type="submit" class="cmd editCmd btn btn-secondary" bookmarkid="${bookmark.Id}" title="Modifier ${bookmark.Title}"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3"
+                        viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5Zm0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5Zm5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5Zm-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5Zm8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Zm7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5Zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z" />
+                    </svg>
+                    <span>&nbsp;Modifier</span>
+                </button>
+                `);
                 let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
                 bookmarkRow.append(catElem);
                 bookmarkRow.append(titElem);
