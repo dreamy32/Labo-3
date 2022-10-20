@@ -109,7 +109,7 @@
                     <br>
                     <input type="text" id="category_input" class="form-control" placeholder="catégorie" required>
                     <br>
-                    <input type="text" id="date_input" class="form-control" placeholder="date" required>
+                    <!-- <input type="text" id="date_input" class="form-control" placeholder="date" required> -->
                 </form>
             </div>
             <div id="confirmDlg">
@@ -219,11 +219,8 @@
                 let catElem = $(`<h6><small>${bookmark.Category}</small></h6>`);
                 let titElem = $(`<h2 id='title'>${bookmark.Title}</h2>`);
                 let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Title}'></div>`);
-                const date = new Date().toLocaleDateString();
-                let dateElem = $(`<span>Publié le : <b>${date}</b></span>`);
+                let dateElem = $(`<span>Publié le : <b>${bookmark.Date}</b></span>`);
                 let textElem = $(`<hr> <p>${bookmark.Text}</p><hr>`);
-                // let editCmd = $(`<div class="cmd editCmd glyphicon fa fa-pencil-square" bookmarkid="${bookmark.Id}" title="Editer ${bookmark.Title}"></div>`);
-                // let deleteCmd = $(`<div class="cmd deleteCmd fa  fa-window-close" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"></div>`);
                 let deleteCmd = $(`
                 <button type="submit" class="cmd deleteCmd btn btn-danger" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3"
@@ -270,7 +267,7 @@
             function newBookmark() {
                 holdCheckETag = true;
                 createMode = true;
-                $("#bookmarkDlg").dialog('option', 'title', 'Ajout de favori');
+                $("#bookmarkDlg").dialog('option', 'title', 'Ajout de nouvelle');
                 $("#bookmarkDlgOkBtn").text("Ajouter");
                 $("#bookmarkDlg").dialog('open');
             }
@@ -279,13 +276,13 @@
                 createMode = false;
                 GET_ID(e.target.getAttribute("bookmarkid"), bookmarkToForm, error);
                 holdCheckETag = true;
-                $("#bookmarkDlg").dialog('option', 'title', 'Modification de favori');
+                $("#bookmarkDlg").dialog('option', 'title', 'Modification de nouvelle');
                 $("#bookmarkDlgOkBtn").text("Modifier");
                 $("#bookmarkDlg").dialog('open');
             }
 
             function setConfirmationMessage(bookmark) {
-                $("#confirmationMessage").html("Voulez-vous vraiment effacer le favori <b>" + bookmark.Title + "</b>?");
+                $("#confirmationMessage").html("Voulez-vous vraiment effacer la nouvelle <b>" + bookmark.Title + "</b>?");
             }
             let bookmarkIdToDelete = 0;
             function deleteBookmark(e) {
@@ -294,7 +291,7 @@
                 bookmarkIdToDelete = e.target.getAttribute("bookmarkid")
                 GET_ID(e.target.getAttribute("bookmarkid"), setConfirmationMessage, error);
                 holdCheckETag = true;
-                $("#confirmDlg").dialog('option', 'title', 'Retrait de favori...');
+                $("#confirmDlg").dialog('option', 'title', 'Retrait de nouvelle...');
                 $("#confirmDlgOkBtn").text("Effacer");
                 $("#confirmDlg").dialog('open');
             }
@@ -308,7 +305,8 @@
             }
             function bookmarkFromForm() {
                 if ($("#bookmakForm")[0].checkValidity()) {
-                    let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Category: $("#category_input").val(), Text: $("#text_input").val(), ImageUrl: $("#url_input").val(), Date: parseInt($("#date_input").val()) };
+                    const date = new Date(); 
+                    let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Category: $("#category_input").val(), Text: $("#text_input").val(), ImageUrl: $("#url_input").val(), Date: date};
                     return bookmark;
                 } else {
                     $("#bookmakForm")[0].reportValidity()
