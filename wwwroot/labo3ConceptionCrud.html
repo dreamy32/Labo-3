@@ -1,235 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Bookmarks Manager</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet"
-            href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-            <style>
-                .mainContainer {
-                    width: 50%;
-                    max-width: 700px;
-                    min-width: 500px;
-                    margin: auto;
-                }
-        
-                .header {
-                    font-size: 36px;
-                    font-weight: bold;
-                    padding: 10px;
-                }
-        
-                #searchBar {
-                    display: none;
-                }
-        
-                #bookmarksList {
-                    width: 100%;
-                    padding: 10px;
-                }
-        
-                .favicon {
-                    height: 24px;
-                    margin: 8px;
-                }
-        
-        
-                .bookmarkRow>.cmd {
-                    display: none;
-                }
-        
-                .bookmarkRow:hover>.cmd {
-                    display: inline-block;
-                }
-        
-        
-                .visually-hidden,
-                .visually-hidden-focusable:not(:focus):not(:focus-within) {
-                    position: absolute !important;
-                    width: 1px !important;
-                    height: 1px !important;
-                    padding: 0 !important;
-                    margin: -1px !important;
-                    overflow: hidden !important;
-                    clip: rect(0, 0, 0, 0) !important;
-                    white-space: nowrap !important;
-                    border: 0 !important;
-                }
-        
-                .bi {
-                    vertical-align: -0.125em;
-                }
-            </style>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bookmarks Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="css/crud.css">
+</head>
 
-    <body>
-        <div style="position: fixed; bottom: 5px; left: 5px;">
-            <button id="newBookmarkCmd" type="button" class="btn btn-lg text-primary" >
-                <svg xmlns="http://www.w3.org/2000/svg" width="112" height="112" fill="currentColor"
-                    class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                    <path
-                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z">
-                    </path>
-                </svg>
-            </button>
-        </div>
-        <div style="text-align: center; margin: 35px;">
-            <h1>Gestionaire de Nouvelles</h1>
-        </div>
-        <div class="mainContainer">
-            <hr>
-            <div id="searchBar">
-                <div class="bookmarkLayout">
-                    <input type="search" id="searchCategory" class="form-control"> </input>
-                    <span class="cmd fa fa-refresh"></span>
-                    <input type="search" id="searchTitle" class="form-control"> </input>
-                    <span class="cmd fa fa-refresh"></span>
-                </div>
-            </div>
-
-            <div>
-                <div id="bookmarksList">
-
-                </div>
-            </div>
-            <!--Dialogues -->
-            <div id="bookmarkDlg">
-                <form id="bookmakForm">
-                    <input type="hidden" id="Id_input" value="0">
-                    <br>
-                    <input type="text" id="title_input" class="form-control" placeholder="Title" required>
-                    <br>
-                    <input type="text" id="text_input" class="form-control" placeholder="texte" required>
-                    <br>
-                    <input type="text" id="url_input" class="form-control" placeholder="url image" required>
-                    <br>
-                    <input type="text" id="category_input" class="form-control" placeholder="catégorie" required>
-                    <br>
-                    <!-- <input type="text" id="date_input" class="form-control" placeholder="date" required> -->
-                </form>
-            </div>
-            <div id="confirmDlg">
-                <span id="confirmationMessage"></span>
+<body>
+    <div style="position: fixed; bottom: 5px; left: 5px;">
+        <button id="newBookmarkCmd" type="button" class="btn btn-lg text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="112" height="112" fill="currentColor"
+                class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z">
+                </path>
+            </svg>
+        </button>
+    </div>
+    <div class="mainContainer">
+        <h1 style="text-align: center;">Gestionaire de Nouvelles</h1>
+        <hr>
+        <div id="searchBar">
+            <div class="bookmarkLayout">
+                <input type="search" id="searchCategory" class="form-control"> </input>
+                <span class="cmd fa fa-refresh"></span>
+                <input type="search" id="searchTitle" class="form-control"> </input>
+                <span class="cmd fa fa-refresh"></span>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src='/utilities.js'></script>
-        <script defer>
 
-$(".mainContainer").scroll(function () {
-                    if ($(".mainContainer").scrollTop() + $(".mainContainer").innerHeight() >= $("#bookmarksList").height()) {
-                        // todo: charger la prochaine nouvelle
-                    }
-                });
-            
-            const apiBaseURL = "http://localhost:5000/api/news";
-            const periodicRefreshPeriod = 10;
-            let holdCheckETag = false;
-            let currentETag = "";
-            let createMode = true;
-            let searchCategory = "";
-            let searchTitle = "";
-            let hideSearchBar = true;
+        <div>
+            <div id="bookmarksList">
 
+            </div>
+        </div>
+        <!--Dialogues -->
+        <div id="bookmarkDlg">
+            <form id="bookmakForm">
+                <input type="hidden" id="Id_input" value="0">
+                <br>
+                <input type="text" id="title_input" class="form-control" placeholder="Title" required>
+                <br>
+                <input type="text" id="text_input" class="form-control" placeholder="texte" required>
+                <br>
+                <input type="text" id="url_input" class="form-control" placeholder="url image" required>
+                <br>
+                <input type="text" id="category_input" class="form-control" placeholder="catégorie" required>
+                <br>
+                <!-- <input type="text" id="date_input" class="form-control" placeholder="date" required> -->
+            </form>
+        </div>
+        <div id="confirmDlg">
+            <span id="confirmationMessage"></span>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src='/utilities.js'></script>
+    <script defer>
+
+        $(".mainContainer").scroll(function () {
+            if ($(".mainContainer").scrollTop() + $(".mainContainer").innerHeight() >= $("#bookmarksList").height()) {
+                // todo: charger la prochaine nouvelle
+            }
+        });
+
+        const apiBaseURL = "http://localhost:5000/api/news";
+        const periodicRefreshPeriod = 10;
+        let holdCheckETag = false;
+        let currentETag = "";
+        let createMode = true;
+        let searchCategory = "";
+        let searchTitle = "";
+        let hideSearchBar = true;
+
+        HEAD(checkETag);
+        setInterval(() => {
             HEAD(checkETag);
-            setInterval(() => {
-                HEAD(checkETag);
-            }, periodicRefreshPeriod * 1000);
+        }, periodicRefreshPeriod * 1000);
 
-            function checkETag(ETag) {
-                if (!holdCheckETag && ETag != currentETag) {
-                    currentETag = ETag;
-                    getBookmarksList();
-                }
+        function checkETag(ETag) {
+            if (!holdCheckETag && ETag != currentETag) {
+                currentETag = ETag;
+                getBookmarksList();
             }
-            function getBookmarksList() {
-                // basic search
-                let queryString = "?sort=Date,desc";
+        }
+        function getBookmarksList() {
+            // basic search
+            let queryString = "?sort=Date,desc";
 
-                // category and title search
-                if (!hideSearchBar) {
-                    let searchCategory = $("#searchCategory").val();
-                    let searchTitle = $("#searchTitle").val();
-                    if (searchCategory != "")
-                        queryString += "&Category=*" + searchCategory + "*";
-                    if (searchTitle != "")
-                        queryString += "&Title=*" + searchTitle + "*";
-                }
-
-                // then get all from search
-                GET_ALL(refreshBookmarksList, error, queryString);
+            // category and title search
+            if (!hideSearchBar) {
+                let searchCategory = $("#searchCategory").val();
+                let searchTitle = $("#searchTitle").val();
+                if (searchCategory != "")
+                    queryString += "&Category=*" + searchCategory + "*";
+                if (searchTitle != "")
+                    queryString += "&Title=*" + searchTitle + "*";
             }
 
-            function HEAD(successCallBack) {
-                $.ajax({
-                    url: apiBaseURL,
-                    type: 'HEAD',
-                    contentType: 'text/plain',
-                    complete: request => { successCallBack(request.getResponseHeader('ETag')) },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function GET_ID(id, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL + "/" + id,
-                    type: 'GET',
-                    success: data => { successCallBack(data); },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function GET_ALL(successCallBack, errorCallBack, queryString = null) {
-                let url = apiBaseURL + (queryString ? queryString : "");
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: (data, status, xhr) => { successCallBack(data, xhr.getResponseHeader("ETag")) },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function POST(data, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    success: (data) => { successCallBack(data) },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function PUT(bookmark, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL + "/" + bookmark.Id,
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify(bookmark),
-                    success: () => { successCallBack() },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
-            function DELETE(id, successCallBack, errorCallBack) {
-                $.ajax({
-                    url: apiBaseURL + "/" + id,
-                    type: 'DELETE',
-                    success: () => { successCallBack() },
-                    error: function (jqXHR) { errorCallBack(jqXHR.status) }
-                });
-            }
+            // then get all from search
+            GET_ALL(refreshBookmarksList, error, queryString);
+        }
 
-            
-            function insertIntoBookmarkList(bookmark) {
-                // insert into the div
-                let catElem = $(`<h6><small>${bookmark.Category}</small></h6>`);
-                let titElem = $(`<h2 id='title'>${bookmark.Title}</h2>`);
-                let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Title}'></div>`);
-                let test = Date.parse(bookmark.Date);
-                let dateElem = $(`<span>Publié le : <b>${bookmark.Date.substr(0,10)}</b></span>`);
-                let textElem = $(`<hr> <p>${bookmark.Text}</p><hr>`);
-                let deleteCmd = $(`
+        function HEAD(successCallBack) {
+            $.ajax({
+                url: apiBaseURL,
+                type: 'HEAD',
+                contentType: 'text/plain',
+                complete: request => { successCallBack(request.getResponseHeader('ETag')) },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function GET_ID(id, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL + "/" + id,
+                type: 'GET',
+                success: data => { successCallBack(data); },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function GET_ALL(successCallBack, errorCallBack, queryString = null) {
+            let url = apiBaseURL + (queryString ? queryString : "");
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: (data, status, xhr) => { successCallBack(data, xhr.getResponseHeader("ETag")) },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function POST(data, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (data) => { successCallBack(data) },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function PUT(bookmark, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL + "/" + bookmark.Id,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(bookmark),
+                success: () => { successCallBack() },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+        function DELETE(id, successCallBack, errorCallBack) {
+            $.ajax({
+                url: apiBaseURL + "/" + id,
+                type: 'DELETE',
+                success: () => { successCallBack() },
+                error: function (jqXHR) { errorCallBack(jqXHR.status) }
+            });
+        }
+
+
+        function insertIntoBookmarkList(bookmark) {
+            // insert into the div
+            let catElem = $(`<h6><small>${bookmark.Category}</small></h6>`);
+            let titElem = $(`<h2 id='title'>${bookmark.Title}</h2>`);
+            let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Title}'></div>`);
+            let test = Date.parse(bookmark.Date);
+            let dateElem = $(`<span>Publié le : <b>${bookmark.Date.substr(0, 10)}</b></span>`);
+            let textElem = $(`<hr> <p>${bookmark.Text}</p><hr>`);
+            let deleteCmd = $(`
                 <button type="submit" class="cmd deleteCmd btn btn-danger" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3"
                         viewBox="0 0 16 16">
@@ -240,7 +184,7 @@ $(".mainContainer").scroll(function () {
                     <span>&nbsp;Retirer</span>
                 </button>
                 `);
-                let editCmd = $(`
+            let editCmd = $(`
                 <button type="submit" class="cmd editCmd btn btn-secondary" bookmarkid="${bookmark.Id}" title="Modifier ${bookmark.Title}"> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3"
                         viewBox="0 0 16 16">
@@ -250,168 +194,168 @@ $(".mainContainer").scroll(function () {
                     <span>&nbsp;Modifier</span>
                 </button>
                 `);
-                let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
-                bookmarkRow.append(catElem);
-                bookmarkRow.append(titElem);
-                bookmarkRow.append(imageElem);
-                bookmarkRow.append(dateElem);
-                bookmarkRow.append(textElem);
-                bookmarkRow.append(editCmd);
-                bookmarkRow.append(deleteCmd);
-                $("#bookmarksList").append(bookmarkRow);
-            }
+            let bookmarkRow = $("<div class='bookmarkLayout bookmarkRow'></div");
+            bookmarkRow.append(catElem);
+            bookmarkRow.append(titElem);
+            bookmarkRow.append(imageElem);
+            bookmarkRow.append(dateElem);
+            bookmarkRow.append(textElem);
+            bookmarkRow.append(editCmd);
+            bookmarkRow.append(deleteCmd);
+            $("#bookmarksList").append(bookmarkRow);
+        }
 
-            function refreshBookmarksList(bookmarks, ETag) {
-                currentETag = ETag;
-                $("#bookmarksList").empty();
-                for (let bookmark of bookmarks) {
-                    insertIntoBookmarkList(bookmark);
-                }
-                $(".editCmd").click((e) => { editBookmark(e) });
-                $(".deleteCmd").click((e) => { deleteBookmark(e) });
+        function refreshBookmarksList(bookmarks, ETag) {
+            currentETag = ETag;
+            $("#bookmarksList").empty();
+            for (let bookmark of bookmarks) {
+                insertIntoBookmarkList(bookmark);
             }
-            function error(status) {
-            }
-            function newBookmark() {
-                holdCheckETag = true;
-                createMode = true;
-                $("#bookmarkDlg").dialog('option', 'title', 'Ajout de nouvelle');
-                $("#bookmarkDlgOkBtn").text("Ajouter");
-                $("#bookmarkDlg").dialog('open');
-            }
-            function editBookmark(e) {
-                holdCheckETag = true;
-                createMode = false;
-                GET_ID(e.target.getAttribute("bookmarkid"), bookmarkToForm, error);
-                holdCheckETag = true;
-                $("#bookmarkDlg").dialog('option', 'title', 'Modification de nouvelle');
-                $("#bookmarkDlgOkBtn").text("Modifier");
-                $("#bookmarkDlg").dialog('open');
-            }
+            $(".editCmd").click((e) => { editBookmark(e) });
+            $(".deleteCmd").click((e) => { deleteBookmark(e) });
+        }
+        function error(status) {
+        }
+        function newBookmark() {
+            holdCheckETag = true;
+            createMode = true;
+            $("#bookmarkDlg").dialog('option', 'title', 'Ajout de nouvelle');
+            $("#bookmarkDlgOkBtn").text("Ajouter");
+            $("#bookmarkDlg").dialog('open');
+        }
+        function editBookmark(e) {
+            holdCheckETag = true;
+            createMode = false;
+            GET_ID(e.target.getAttribute("bookmarkid"), bookmarkToForm, error);
+            holdCheckETag = true;
+            $("#bookmarkDlg").dialog('option', 'title', 'Modification de nouvelle');
+            $("#bookmarkDlgOkBtn").text("Modifier");
+            $("#bookmarkDlg").dialog('open');
+        }
 
-            function setConfirmationMessage(bookmark) {
-                $("#confirmationMessage").html("Voulez-vous vraiment effacer la nouvelle <b>" + bookmark.Title + "</b>?");
+        function setConfirmationMessage(bookmark) {
+            $("#confirmationMessage").html("Voulez-vous vraiment effacer la nouvelle <b>" + bookmark.Title + "</b>?");
+        }
+        let bookmarkIdToDelete = 0;
+        function deleteBookmark(e) {
+            holdCheckETag = true;
+            createMode = false;
+            bookmarkIdToDelete = e.target.getAttribute("bookmarkid")
+            GET_ID(e.target.getAttribute("bookmarkid"), setConfirmationMessage, error);
+            holdCheckETag = true;
+            $("#confirmDlg").dialog('option', 'title', 'Retrait de nouvelle...');
+            $("#confirmDlgOkBtn").text("Effacer");
+            $("#confirmDlg").dialog('open');
+        }
+        function resetBookmarkForm() {
+            $("#Id_input").val("0");
+            $("#title_input").val("");
+            $("#text_input").val("");
+            $("#url_input").val("");
+            $("#category_input").val("");
+            $("#date_input").val("0");
+        }
+        function bookmarkFromForm() {
+            if ($("#bookmakForm")[0].checkValidity()) {
+                const date = new Date();
+                let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Category: $("#category_input").val(), Text: $("#text_input").val(), ImageUrl: $("#url_input").val(), Date: date };
+                return bookmark;
+            } else {
+                $("#bookmakForm")[0].reportValidity()
             }
-            let bookmarkIdToDelete = 0;
-            function deleteBookmark(e) {
-                holdCheckETag = true;
-                createMode = false;
-                bookmarkIdToDelete = e.target.getAttribute("bookmarkid")
-                GET_ID(e.target.getAttribute("bookmarkid"), setConfirmationMessage, error);
-                holdCheckETag = true;
-                $("#confirmDlg").dialog('option', 'title', 'Retrait de nouvelle...');
-                $("#confirmDlgOkBtn").text("Effacer");
-                $("#confirmDlg").dialog('open');
-            }
-            function resetBookmarkForm() {
-                $("#Id_input").val("0");
-                $("#title_input").val("");
-                $("#text_input").val("");
-                $("#url_input").val("");
-                $("#category_input").val("");
-                $("#date_input").val("0");
-            }
-            function bookmarkFromForm() {
-                if ($("#bookmakForm")[0].checkValidity()) {
-                    const date = new Date(); 
-                    let bookmark = { Id: parseInt($("#Id_input").val()), Title: $("#title_input").val(), Category: $("#category_input").val(), Text: $("#text_input").val(), ImageUrl: $("#url_input").val(), Date: date};
-                    return bookmark;
-                } else {
-                    $("#bookmakForm")[0].reportValidity()
-                }
-                return false;
-            }
-            function bookmarkToForm(bookmark) {
-                $("#Id_input").val(bookmark.Id);
-                $("#title_input").val(bookmark.Title);
-                $("#url_input").val(bookmark.ImageUrl);
-                $("#category_input").val(bookmark.Category);
-                $("#text_input").val(bookmark.Text);
-                $("#date_input").val(bookmark.Date);
-            }
+            return false;
+        }
+        function bookmarkToForm(bookmark) {
+            $("#Id_input").val(bookmark.Id);
+            $("#title_input").val(bookmark.Title);
+            $("#url_input").val(bookmark.ImageUrl);
+            $("#category_input").val(bookmark.Category);
+            $("#text_input").val(bookmark.Text);
+            $("#date_input").val(bookmark.Date);
+        }
 
-            $("#newBookmarkCmd").click(newBookmark)
-            $(".fa-refresh").click((e) => {
-                getBookmarksList();
-            })
+        $("#newBookmarkCmd").click(newBookmark)
+        $(".fa-refresh").click((e) => {
+            getBookmarksList();
+        })
 
-            $(".fa-search").click((e) => {
-                console.log("search");
-                hideSearchBar = !hideSearchBar;
-                if (hideSearchBar)
-                    $("#searchBar").hide();
-                else
-                    $("#searchBar").show();
-                getBookmarksList();
-            })
+        $(".fa-search").click((e) => {
+            console.log("search");
+            hideSearchBar = !hideSearchBar;
+            if (hideSearchBar)
+                $("#searchBar").hide();
+            else
+                $("#searchBar").show();
+            getBookmarksList();
+        })
 
-            $("#bookmarkDlg").dialog(
+        $("#bookmarkDlg").dialog(
+            {
+                title: "Nouveau favori",
+                autoOpen: false,
+                show: { effect: 'fade', speed: 400 },
+                hide: { effect: 'fade', speed: 400 },
+            });
+        $("#bookmarkDlg").dialog("option", "position", { my: "top", at: "top", of: window });
+        $("#bookmarkDlg").dialog("option", "buttons",
+            [
                 {
-                    title: "Nouveau favori",
-                    autoOpen: false,
-                    show: { effect: 'fade', speed: 400 },
-                    hide: { effect: 'fade', speed: 400 },
-                });
-            $("#bookmarkDlg").dialog("option", "position", { my: "top", at: "top", of: window });
-            $("#bookmarkDlg").dialog("option", "buttons",
-                [
-                    {
-                        id: "bookmarkDlgOkBtn",
-                        text: "Ajouter...",
-                        click: function () {
-                            let bookmark = bookmarkFromForm();
-                            if (bookmark) {
-                                if (createMode)
-                                    POST(bookmark, refreshBookmarksList, error);
-                                else
-                                    PUT(bookmark, refreshBookmarksList, error);
-                                resetBookmarkForm();
-                                holdCheckETag = false;
-                                $(this).dialog("close");
-                            }
-                        }
-                    },
-                    {
-                        text: "Annuler",
-                        click: function () {
+                    id: "bookmarkDlgOkBtn",
+                    text: "Ajouter...",
+                    click: function () {
+                        let bookmark = bookmarkFromForm();
+                        if (bookmark) {
+                            if (createMode)
+                                POST(bookmark, refreshBookmarksList, error);
+                            else
+                                PUT(bookmark, refreshBookmarksList, error);
+                            resetBookmarkForm();
                             holdCheckETag = false;
                             $(this).dialog("close");
                         }
                     }
-                ]
-            );
-            $("#confirmDlg").dialog(
+                },
                 {
-                    title: "Attention...",
-                    autoOpen: false,
-                    show: { effect: 'fade', speed: 400 },
-                    hide: { effect: 'fade', speed: 400 },
-                });
-            $("#confirmDlg").dialog("option", "position", { my: "top", at: "top", of: window });
-            $("#confirmDlg").dialog("option", "buttons",
-                [
-                    {
-                        id: "confirmDlgOkBtn",
-                        text: "Oui",
-                        click: function () {
-                            holdCheckETag = false;
-                            if (bookmarkIdToDelete)
-                                DELETE(bookmarkIdToDelete, refreshBookmarksList, error);
-                            bookmarkIdToDelete = 0;
-                            $(this).dialog("close");
-                        }
-                    },
-                    {
-                        text: "Annuler",
-                        click: function () {
-                            holdCheckETag = false;
-                            bookmarkIdToDelete = 0;
-                            $(this).dialog("close");
-                        }
+                    text: "Annuler",
+                    click: function () {
+                        holdCheckETag = false;
+                        $(this).dialog("close");
                     }
-                ]
-            );
-        </script>
-    </body>
+                }
+            ]
+        );
+        $("#confirmDlg").dialog(
+            {
+                title: "Attention...",
+                autoOpen: false,
+                show: { effect: 'fade', speed: 400 },
+                hide: { effect: 'fade', speed: 400 },
+            });
+        $("#confirmDlg").dialog("option", "position", { my: "top", at: "top", of: window });
+        $("#confirmDlg").dialog("option", "buttons",
+            [
+                {
+                    id: "confirmDlgOkBtn",
+                    text: "Oui",
+                    click: function () {
+                        holdCheckETag = false;
+                        if (bookmarkIdToDelete)
+                            DELETE(bookmarkIdToDelete, refreshBookmarksList, error);
+                        bookmarkIdToDelete = 0;
+                        $(this).dialog("close");
+                    }
+                },
+                {
+                    text: "Annuler",
+                    click: function () {
+                        holdCheckETag = false;
+                        bookmarkIdToDelete = 0;
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        );
+    </script>
+</body>
 
 </html>
