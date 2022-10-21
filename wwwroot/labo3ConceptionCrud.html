@@ -120,6 +120,12 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src='/utilities.js'></script>
         <script defer>
+
+$(".mainContainer").scroll(function () {
+                    if ($(".mainContainer").scrollTop() + $(".mainContainer").innerHeight() >= $("#bookmarksList").height()) {
+                        // todo: charger la prochaine nouvelle
+                    }
+                });
             
             const apiBaseURL = "http://localhost:5000/api/news";
             const periodicRefreshPeriod = 10;
@@ -214,12 +220,14 @@
                 });
             }
 
+            
             function insertIntoBookmarkList(bookmark) {
                 // insert into the div
                 let catElem = $(`<h6><small>${bookmark.Category}</small></h6>`);
                 let titElem = $(`<h2 id='title'>${bookmark.Title}</h2>`);
                 let imageElem = $(`<div><img style='width:100%;' src='${bookmark.ImageUrl}' alt='${bookmark.Title}'></div>`);
-                let dateElem = $(`<span>Publié le : <b>${bookmark.Date}</b></span>`);
+                let test = Date.parse(bookmark.Date);
+                let dateElem = $(`<span>Publié le : <b>${bookmark.Date.substr(0,10)}</b></span>`);
                 let textElem = $(`<hr> <p>${bookmark.Text}</p><hr>`);
                 let deleteCmd = $(`
                 <button type="submit" class="cmd deleteCmd btn btn-danger" bookmarkid="${bookmark.Id}" title="Effacer ${bookmark.Title}"> 
