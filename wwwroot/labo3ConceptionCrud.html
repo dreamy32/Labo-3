@@ -120,6 +120,12 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src='/utilities.js'></script>
         <script defer>
+
+$(".mainContainer").scroll(function () {
+                    if ($(".mainContainer").scrollTop() + $(".mainContainer").innerHeight() >= $("#bookmarksList").height()) {
+                        // todo: charger la prochaine nouvelle
+                    }
+                });
             
             const apiBaseURL = "http://localhost:5000/api/news";
             const periodicRefreshPeriod = 10;
@@ -214,6 +220,7 @@
                 });
             }
 
+            
             function insertIntoBookmarkList(bookmark) {
                 // insert into the div
                 let catElem = $(`<h6><small>${bookmark.Category}</small></h6>`);
